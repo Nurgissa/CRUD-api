@@ -1,29 +1,56 @@
-type HttpMethod = "GET" | "POST" | "PATCH" | "DELETE";
+import { IncomingMessage, ServerResponse } from "http";
+import { IncomingDataMessage } from "./application";
+
+export type HttpMethod = "GET" | "POST" | "PUT" | "DELETE";
+
+export type Handler = (
+  request: IncomingDataMessage,
+  response: ServerResponse
+) => void;
 
 class Route {
-    private _url: string;
-    private _method: HttpMethod;
-    private _handler: () => void;
+  private readonly _url: string;
+  private readonly _method: HttpMethod;
+  private readonly _handler: Handler;
 
-    constructor(url: string, method: HttpMethod, handler: any) {
-        this._url = url;
-        this._method = method;
-        this._handler = handler;
+  constructor(method: HttpMethod, url: string, handler: Handler) {
+    this._url = url;
+    this._method = method;
+    this._handler = handler;
+  }
+
+  static get(url: string, callback: Handler) {
+    return new Route("GET", url, callback);
+  }
+
+  static post(url: string, callback: Handler) {
+    return new Route("POST", url, callback);
+  }
+
+  static put(url: string, callback: Handler) {
+    return new Route("PUT", url, callback);
+  }
+
+  static delete(url: string, callback: Handler) {
+    return new Route("DELETE", url, callback);
+  }
+
+  process(req: IncomingDataMessage, res: ServerResponse) {
+    if (this._canHandle(req)) {
+      this._handler(req, res);
     }
+  }
 
-    static get(url: string, callback: any) {
-        return new Route("GET", url, callback);
-    }
+  _canHandle(req: IncomingDataMessage) {
+    const url = req.url;
+    const method = req.method;
 
-    static post(url: string, callback: any) {
+    console.log(url, method);
 
-    } 
+    if (this._url === "*") return true;
 
-    static patch(url: string, callback: any) {
-
-    }
-
-    static delete(url: string, callback: any) {
-
-    }
+    return method === this._method && url === this._url;
+  }
 }
+
+export default Route;
