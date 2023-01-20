@@ -1,20 +1,11 @@
-import u4 from "uuid";
 import { UserEntity } from "../types";
 import { UserError } from "../errors";
-import { type } from "os";
 
 export type UserDTO = {
   id: string;
   username: string;
   age: number;
   hobbies: string[];
-};
-
-export type User = {
-  getId: () => string;
-  getUsername: () => string;
-  getAge: () => number;
-  getHobbies: () => string[];
 };
 
 type Props = {
@@ -73,11 +64,11 @@ export default function buildMakeUser({ validateId }: Props) {
     //   }
     // });
 
-    return Object.freeze({
+    return {
       id,
       username,
       age,
       hobbies,
-    });
+    };
   };
 }
