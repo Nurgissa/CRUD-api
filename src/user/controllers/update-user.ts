@@ -1,6 +1,6 @@
-import { IncomingDataMessage } from "../../app/application";
 import { ServerResponse } from "http";
-import { toError, toJSON } from "../../utils";
+import { IncomingDataMessage } from "../../app/application";
+import { parseJSON, toError, toJSON } from "../../utils";
 import { UserError } from "../errors";
 import service from "../services";
 
@@ -24,7 +24,7 @@ export function updateUserController(
       });
 
     const id = param["userId"];
-    const dto = JSON.parse(req.body);
+    const dto = parseJSON(req.body);
 
     const user = service.update(id, dto);
     return toJSON(res, 200, user);

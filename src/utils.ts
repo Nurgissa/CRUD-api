@@ -17,7 +17,7 @@ export function toError(res: ServerResponse, error: unknown) {
       statusCode = 404;
     }
   }
-
+  
   res.setHeader("Content-Type", "application/json");
   res.writeHead(statusCode);
   res.end(
@@ -25,4 +25,16 @@ export function toError(res: ServerResponse, error: unknown) {
       error,
     })
   );
+}
+
+export function parseJSON(body: string) {
+  try {
+    return JSON.parse(body);
+  } catch (e) {
+    throw new UserError({
+      name: "MALFORMED_INPUT",
+      message: "Could not parse body",
+      cause: e,
+    });
+  }
 }
