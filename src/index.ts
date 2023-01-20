@@ -1,40 +1,24 @@
 import Application from "./app/application";
 import Route from "./app/router";
-import { IncomingMessage, ServerResponse } from "http";
+
+import {
+  createUserController,
+  deleteUserController,
+  getAllUsersController,
+  getUserController,
+  updateUserController,
+} from "./user/controllers";
 
 const app = new Application();
 
-app.use(
-  Route.get("/users", (req, res) => {
-    res.setHeader("Content-Type", "application/json");
-    res.writeHead(200);
-    res.end(`{"message": "This is a JSON response"}`);
-  })
-);
-app.use(
-  Route.post("/users", (req, res) => {
-    res.setHeader("Content-Type", "application/json");
-    res.writeHead(200);
-    res.end(`{"message": "This is a JSON response"}`);
-  })
-);
-app.use(
-  Route.put("/users", (req, res) => {
-    res.setHeader("Content-Type", "application/json");
-    res.writeHead(200);
-    res.end(`{"message": "This is a JSON response"}`);
-  })
-);
-app.use(
-  Route.delete("/users", (req, res) => {
-    res.setHeader("Content-Type", "application/json");
-    res.writeHead(200);
-    res.end(`{"message": "This is a JSON response"}`);
-  })
-);
+app.use(Route.get("/api/users", getAllUsersController));
+app.use(Route.get("/api/users/{userId}", getUserController));
+app.use(Route.post("/api/users", createUserController));
+app.use(Route.put("/api/users/{userId}", updateUserController));
+app.use(Route.delete("/api/users/{userId}", deleteUserController));
 
 app.use(
-  Route.get("*", (req, res) => {
+  Route.notFound((req, res) => {
     if (res.writableEnded) return;
 
     res.writeHead(404);

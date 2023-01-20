@@ -3,6 +3,7 @@ import Route from "./router";
 
 export interface IncomingDataMessage extends IncomingMessage {
   body?: string;
+  params?: Record<string, string>;
 }
 
 class Application {
