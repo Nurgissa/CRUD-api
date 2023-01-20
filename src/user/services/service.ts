@@ -45,14 +45,7 @@ class UserService {
       });
     }
 
-    const user = makeUser({
-      id,
-      username: dto.username,
-      age: dto.age,
-      hobbies: dto.hobbies,
-    });
-
-    return this._repository.updateOne(id, user);
+    return this._repository.updateOne(id, dto);
   }
 
   public deleteById(id: string) {
